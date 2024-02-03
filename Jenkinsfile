@@ -45,11 +45,11 @@ pipeline {
         }
         stage('Build'){
             steps {
-                """
+                sh """
                 ls -la
                 zip -r catalogue.zip ./* -x ".git" -x "*.zip"
                 ls -ltr
-                """
+                 """
             }
         }
 
