@@ -43,36 +43,21 @@ pipeline {
                """
             }
         }
-        stage('Test'){
+        stage('Build'){
             steps {
-                echo 'Testing'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh """
-                  echo " hi     again"
-                  echo "$GREETING"
+                """
+                ls -la
+                zip -r catalogue.zip ./* -x ".git" -x "*.zip"
+                ls -ltr
                 """
             }
         }
 
-        stage('check parms')
-        {
-            steps {
-                sh """  
-                  echo "Hello ${params.PERSON}"
-                  echo "Biography: ${params.BIOGRAPHY}"
-                  echo "Toggle: ${params.TOGGLE}"
-                    echo "Password: ${params.PASSWORD}"
-                """
-            }
-
-    } 
     }
     post { 
         always { 
             echo 'I will always say Hello again Narasimha!'
+            deleteDr()
         }
         failure { 
             echo 'Pipeline failed!'
