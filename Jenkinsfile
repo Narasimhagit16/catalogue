@@ -9,7 +9,6 @@ pipeline {
         disableConcurrentBuilds()
         ansiColor('xterm')
 
-        
     }
     // parameters {
     //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
@@ -25,6 +24,7 @@ pipeline {
 
     environment{
         packageVersion=""
+        nexusURL="172.31.10.115:8081"
     }
     stages {
         stage('Get the Package Version') {
@@ -50,6 +50,25 @@ pipeline {
                 zip -q -r catalogue.zip ./* -x ".git" -x "*.zip"
                 ls -ltr
                  """
+            }
+        }
+        stage('Publish Artifacts'){
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: "${nexusURL}",
+                    groupId: 'com.roboshop',
+                    version: "${packageVersion}",
+                    repository: 'catalogue',
+                    credentialsId: 'nexus-auth',
+                    artifacts: [
+                        [artifactId: catalogue,
+                        classifier: '',
+                        file: 'catalogue.zip',
+                        type: 'zip']
+                    ]
+                )
             }
         }
 
