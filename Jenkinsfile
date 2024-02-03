@@ -75,7 +75,7 @@ pipeline {
         stage('Deploy'){
             steps {
                 script{
-                    def params [
+                    def params = [
                         string(name:'version', value= "$packageVersion"),
                         string(name:'environment', value= "dev")
                         ]
