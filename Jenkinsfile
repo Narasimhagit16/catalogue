@@ -57,7 +57,7 @@ pipeline {
     post { 
         always { 
             echo 'I will always say Hello again Narasimha!'
-            deleteDr()
+            deleteDir()
         }
         failure { 
             echo 'Pipeline failed!'
