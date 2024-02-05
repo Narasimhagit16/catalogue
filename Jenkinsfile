@@ -15,7 +15,7 @@ pipeline {
 
     //     text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
 
-    //     booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+           booleanParam(name: 'Deploy', defaultValue: false)
 
     //     choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
 
@@ -89,15 +89,20 @@ pipeline {
             }
         }
         stage('Deploy'){
-            steps {
-                script{
-                    def params = [
-                        string(name:'version', value: "$packageVersion"),
-                        string(name:'environment', value: "dev")
-                        ]
-                    build job: "catalogue-deploy" , wait : true, parameters : params
-                    }
-               }
+            when {
+                expression{
+              params.Deploy == true
+            }
+            }
+                steps {
+                    script{
+                        def params = [
+                            string(name:'version', value: "$packageVersion"),
+                            string(name:'environment', value: "dev")
+                            ]
+                        build job: "catalogue-deploy" , wait : true, parameters : params
+                        }
+                }
         }
 
     }
